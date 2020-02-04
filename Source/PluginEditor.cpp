@@ -42,7 +42,7 @@ SoomplerAudioProcessorEditor::SoomplerAudioProcessorEditor (SoomplerAudioProcess
     // subscribe to all transport events from processor
     processor.setTransportStateListener(this);
     // subscribe to thumbnail events, to catch thumbnail fully loaded time
-    processor.getThumbnail().addChangeListener(this);
+    processor.getSampleManager()->addChangeListener(this);
 
     // StateSaving
     processor.addNewSaveableObject(sampleBrowser);
@@ -53,7 +53,7 @@ SoomplerAudioProcessorEditor::SoomplerAudioProcessorEditor (SoomplerAudioProcess
 SoomplerAudioProcessorEditor::~SoomplerAudioProcessorEditor()
 {
     processor.saveStateAndReleaseObjects();
-    processor.getThumbnail().removeChangeListener(this);
+    processor.getSampleManager()->removeChangeListener(this);
 }
 
 //==============================================================================
@@ -87,12 +87,13 @@ void SoomplerAudioProcessorEditor::transportStateChanged(TransportState state)
 
 void SoomplerAudioProcessorEditor::changeListenerCallback(ChangeBroadcaster *source)
 {
-    if (source == &processor.getThumbnail()) {
-        thumbnailChanged(processor.getThumbnail());
+    auto thumbnail = processor.getSampleManager()->getActiveSample()->thumbnail;
+    if (source == thumbnail.get()) {
+        thumbnailChanged();
     }
 }
 
-void SoomplerAudioProcessorEditor::thumbnailChanged(SAudioThumbnail &thumbnail)
+void SoomplerAudioProcessorEditor::thumbnailChanged()
 {
     // sample loaded
     processor.setVolume(mainPanel.getVolume());
@@ -115,7 +116,7 @@ bool SoomplerAudioProcessorEditor::keyPressed (const KeyPress& key) {
 //    }
 //
     static String keys = "q2w3er5t6y7ui9o0p[azsxdcvgbhnmk,l.;/";
-    auto firstC = Settings::FIRST_KEY_ON_SCREEN;
+    auto firstC = Settings::DEFAULT_FIRST_KEY;
     
     auto pressedChar = key.getTextCharacter();
     auto nextChar = keys[0];

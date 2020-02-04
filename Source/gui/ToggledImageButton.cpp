@@ -9,7 +9,7 @@
 */
 
 #include "ToggledImageButton.h"
-#include "Settings.h"
+#include "../Settings.h"
 
 
 ToggledImageButton::ToggledImageButton(juce::String buttonName) : ImageButton(buttonName), toggled(false) {

@@ -9,7 +9,7 @@
 */
 
 #include "SampleBrowser.h"
-#include "Settings.h"
+#include "../Settings.h"
 #include "SamplePreviewComponent.h"
 
 SampleBrowser::SampleBrowser(FileListener& listener, SoomplerAudioProcessor &processor) : Component("SampleBrowser"),

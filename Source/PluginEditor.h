@@ -14,9 +14,9 @@
 #include "PluginProcessor.h"
 #include "TransportStateListener.h"
 #include "Settings.h"
-#include "MainPanel.h"
-#include "SampleBrowser.h"
-#include "AboutSplash.h"
+#include "gui/MainPanel.h"
+#include "browser/SampleBrowser.h"
+#include "gui/AboutSplash.h"
 
 //==============================================================================
 /**
@@ -43,7 +43,7 @@ private:
     void transportStateChanged(TransportState state) override;
 
     void changeListenerCallback(ChangeBroadcaster* source) override ;
-    void thumbnailChanged(SAudioThumbnail& thumbnail);
+    void thumbnailChanged();
     void drawSampleNameOrMessage(Graphics& graphics);
 
     int64 calculateSampleByCoords(int coord);

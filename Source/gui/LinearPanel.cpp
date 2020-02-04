@@ -9,13 +9,12 @@
 */
 
 #include "LinearPanel.h"
-#include "Settings.h"
+#include "../Settings.h"
 #include <assert.h>
 
 LinearPanel::LinearPanel(Orientation orientation, const String &name) : Component(), orientation(orientation), paddingX(10), paddingY(15) {
     panelLabel.reset(new Label());
     panelLabel->setText(name, NotificationType::dontSendNotification);
-    panelLabel->setSize(name.length() * 4, 10);
     addAndMakeVisible(panelLabel.get());
 }
 
@@ -38,7 +37,7 @@ void LinearPanel::resized() {
     
     fb.performLayout(getLocalBounds());
     
-    panelLabel->setBounds(0, 0, 50, 20);
+    panelLabel->setBounds(0, 0, panelLabel->getText().length() * 6, 20);
 }
 
 void LinearPanel::paint(Graphics &g) {

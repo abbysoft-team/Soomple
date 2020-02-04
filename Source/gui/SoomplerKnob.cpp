@@ -9,7 +9,7 @@
 */
 
 #include "SoomplerKnob.h"
-#include "PluginProcessor.h"
+#include "../PluginProcessor.h"
 
 SoomplerKnob::SoomplerKnob(const String &name) : Component(name), label(name, name) {
     slider.reset(new SoomplerSlider());
@@ -41,6 +41,11 @@ void SoomplerKnob::addListener(Slider::Listener *listener) {
 
 double SoomplerKnob::getValue() const {
     return slider->getValue();
+}
+
+void SoomplerKnob::setValue(double value)
+{
+    slider->setValue(value, NotificationType::sendNotification);
 }
 
 juce::Slider *SoomplerKnob::getSlider() {

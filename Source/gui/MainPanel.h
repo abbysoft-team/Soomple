@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "SampleViewer.h"
-#include "PluginProcessor.h"
+#include "../viewer/SampleViewer.h"
+#include "../PluginProcessor.h"
 #include "PianoRoll.h"
 #include "GuiEditor.h"
 #include "ToggledImageButton.h"
@@ -11,12 +11,15 @@
 #include "SoomplerToggleButton.h"
 #include "LinearPanel.h"
 #include "SoomplerKnob.h"
+#include "AdsrPanel.h"
+#include "SoomplerScrollbar.h"
 
 class MainPanel  : public Component,
                    public Slider::Listener,
                    public Button::Listener,
                    public TransportStateListener,
                    public FileDragAndDropTarget,
+                   public SampleChangeListener,
                    private Timer
 
 {
@@ -32,6 +35,9 @@ public:
 
     float getVolume() const;
 
+    void sampleChanged(std::shared_ptr<SampleInfo> info);
+    void noSamplesLeft() override;
+
 private:
 
     AudioProcessorValueTreeState& stateManager;
@@ -40,17 +46,15 @@ private:
     std::unique_ptr<ButtonAttachment> reverseAttachment;
     
     std::unique_ptr<SoomplerKnob> volumeKnob;
-    std::unique_ptr<SoomplerKnob> attackKnob;
-    std::unique_ptr<SoomplerKnob> decayKnob;
-    std::unique_ptr<SoomplerKnob> sustainKnob;
-    std::unique_ptr<SoomplerKnob> releaseKnob;
+    std::unique_ptr<SoomplerKnob> glideKnob;
     
-    std::unique_ptr<LinearPanel> adsrPanel;
+    std::shared_ptr<AdsrPanel> adsrPanel;
     
     std::unique_ptr<Label> loadSampleTip;
 
     std::shared_ptr<SampleViewer> sampleViewer;
     std::shared_ptr<PianoRoll> pianoRoll;
+    std::unique_ptr<SoomplerScrollbar> pianoScroll;
 
     std::unique_ptr<SoomplerImageButton> openFileButton;
     std::unique_ptr<SoomplerImageButton> aboutButton;
@@ -58,8 +62,6 @@ private:
 
     std::unique_ptr<SoomplerToggleButton> reverseButton;
     
-    ADSR::Parameters adsrParams;
-
     Image backgroundImage;
 
     SoomplerAudioProcessor& processor;

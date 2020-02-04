@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "SoomplerSlider.h"
-#include "PluginProcessor.h"
+#include "../PluginProcessor.h"
 
 class SoomplerKnob : public Component {
     
@@ -27,6 +27,7 @@ public:
     void addListener(Slider::Listener *listener);
     
     double getValue() const;
+    void setValue(double value);
     
     Slider* getSlider();
     

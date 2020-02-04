@@ -11,6 +11,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Glide.h"
 
 namespace soompler {
 
@@ -61,6 +62,11 @@ public:
     void setRootNote(int rootNote);
     void setMidiRange(const BigInteger& midiNotes);
 
+    void setVolume(float volume);
+    float getVolume();
+    void setGlide(float glide);
+    float getGlideLevel();
+
 private:
     //==============================================================================
     friend class ExtendedVoice;
@@ -74,6 +80,9 @@ private:
     ADSR::Parameters params;
 
     bool reversed;
+
+    float volume;
+    float glideLevel;
 
     JUCE_LEAK_DETECTOR (ExtendedSound)
 };
@@ -140,6 +149,8 @@ private:
     ChangeListener* eventListener;
 
     ADSR adsr;
+
+    Glide glide;
 
     JUCE_LEAK_DETECTOR (ExtendedVoice)
 };

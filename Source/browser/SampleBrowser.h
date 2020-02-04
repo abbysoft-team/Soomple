@@ -8,9 +8,9 @@
   ==============================================================================
 */
 #include <JuceHeader.h>
-#include "FileListener.h"
-#include "PluginProcessor.h"
-#include "SaveableState.h"
+#include "../FileListener.h"
+#include "../PluginProcessor.h"
+#include "../SaveableState.h"
 #include "SamplePreviewComponent.h"
 
 #pragma once

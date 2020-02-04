@@ -9,7 +9,7 @@
 */
 
 #include "ExtendedSampler.h"
-#include "Settings.h"
+#include "../Settings.h"
 
 namespace soompler {
 
@@ -24,7 +24,9 @@ ExtendedSound::ExtendedSound (const String& soundName,
     sourceSampleRate (source.sampleRate),
     midiNotes (notes),
     midiRootNote (midiNoteForNormalPitch),
-    reversed(false)
+    reversed(false),
+    volume(1.0f),
+    glideLevel(0.0f)
 {
     if (sourceSampleRate > 0 && source.lengthInSamples > 0)
     {
@@ -78,6 +80,26 @@ void ExtendedSound::setMidiRange(const BigInteger &midiNotes)
     this->midiNotes = midiNotes;
 }
 
+void ExtendedSound::setVolume(float volume)
+{
+    this->volume = volume;
+}
+
+float ExtendedSound::getVolume()
+{
+    return volume;
+}
+
+void ExtendedSound::setGlide(float glide)
+{
+    glideLevel = glide;
+}
+
+float ExtendedSound::getGlideLevel()
+{
+    return glideLevel;
+}
+
 //==============================================================================
     ExtendedVoice::ExtendedVoice(ChangeListener* listener) : volume(1), loopingEnabled(false), eventListener(listener),
     lastL(0),
@@ -94,7 +116,7 @@ void ExtendedVoice::startNote (int midiNoteNumber, float velocity, SynthesiserSo
 {
     static constexpr auto notesInOctave = 12.0;
 
-    if (auto* sound = dynamic_cast<const ExtendedSound*> (s))
+    if (auto* sound = dynamic_cast<ExtendedSound*> (s))
     {
         // each octave make freq two times bigger
         pitchRatio = std::pow (2.0, (midiNoteNumber - sound->midiRootNote) / notesInOctave)
@@ -108,6 +130,9 @@ void ExtendedVoice::startNote (int midiNoteNumber, float velocity, SynthesiserSo
         adsr.setParameters (sound->params);
 
         adsr.noteOn();
+        glide.setLevel(sound->getGlideLevel());
+        glide.setSampleRate(this->getSampleRate());
+        glide.noteOn(midiNoteNumber);
     }
     else
     {
@@ -133,7 +158,9 @@ void ExtendedVoice::controllerMoved (int /*controllerNumber*/, int /*newValue*/)
 
 //==============================================================================
 void ExtendedVoice::renderNextBlock (AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
-{
+{    
+    auto glideLevel = glide.getGlide(numSamples * 2);
+
     if (auto* playingSound = static_cast<ExtendedSound*> (getCurrentlyPlayingSound().get()))
     {
         // raw audio data
@@ -147,7 +174,7 @@ void ExtendedVoice::renderNextBlock (AudioBuffer<float>& outputBuffer, int start
         float* outR = outputBuffer.getNumChannels() > 1 ? outputBuffer.getWritePointer (1, startSample) : nullptr;
 
         float diff = 0;
-        
+
         // whiling through of block of samples that need to be rendered
         // block is (128, 256, 512 etc) samples
         while (--numSamples >= 0)
@@ -167,11 +194,7 @@ void ExtendedVoice::renderNextBlock (AudioBuffer<float>& outputBuffer, int start
             // to l and r samples for both channels
             // mix envelopeValue, google ADSR envelope for more info
             auto envelopeValue = adsr.getNextSample();
-            
-            if (adsr.getParameters().attack > 0) {
-                DBG("attack > 0");
-            }
-
+   
             l *= lgain * envelopeValue;
             r *= rgain * envelopeValue;
     
@@ -201,7 +224,7 @@ void ExtendedVoice::renderNextBlock (AudioBuffer<float>& outputBuffer, int start
             }
             
             // TODO what's that, why pitchratio being added
-            sourceSamplePosition += pitchRatio;
+            sourceSamplePosition += pitchRatio * glideLevel;
 
             // endSample is just sample where end line is placed
             // user can drag that line in gui to change this parameter

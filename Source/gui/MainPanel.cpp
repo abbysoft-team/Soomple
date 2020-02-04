@@ -1,7 +1,7 @@
 #include "MainPanel.h"
-#include "Settings.h"
-#include "Strings.h"
-#include "PluginEditor.h"
+#include "../Settings.h"
+#include "../Strings.h"
+#include "../PluginEditor.h"
 
 //==============================================================================
 MainPanel::MainPanel (SoomplerAudioProcessor& processor) : stateManager(processor.getStateManager()),
@@ -16,6 +16,11 @@ MainPanel::MainPanel (SoomplerAudioProcessor& processor) : stateManager(processo
     addAndMakeVisible(volumeKnob.get());
     editor.addToGuiEditor(volumeKnob.get());
     volumeKnob->attachTo("volume", stateManager);
+
+    glideKnob.reset(new SoomplerKnob("Glide"));
+    addAndMakeVisible(glideKnob.get());
+    editor.addToGuiEditor(glideKnob.get());
+    glideKnob->attachTo("glide", stateManager);
 
     openFileButton.reset (new SoomplerImageButton ("open file button"));
     addAndMakeVisible (openFileButton.get());
@@ -57,14 +62,14 @@ MainPanel::MainPanel (SoomplerAudioProcessor& processor) : stateManager(processo
     loopButton->setBounds (450, 60, 30, 30);
     loopAttachment.reset(new ButtonAttachment(stateManager, "loopMode", *loopButton));
 
-    sampleViewer.reset (new SampleViewer(processor.getThumbnail(), processor, processor));
+    sampleViewer.reset (new SampleViewer(processor, processor, processor.getSampleManager()));
     addAndMakeVisible (sampleViewer.get());
     editor.addToGuiEditor (sampleViewer.get());
     sampleViewer->setName ("SampleViewer");
     sampleViewer->setBounds(Settings::SAMPLE_VIEWER_BOUNDS);
     // not visible until sample is loaded
     sampleViewer->setVisible(false);
-    processor.addSampleInfoListener(sampleViewer);
+    processor.addSampleInfoListener(sampleViewer.get());
 
     loadSampleTip.reset (new Label ("no sample loaded label",
                                     TRANS(Strings::NO_SAMPLE_LOADED_TEXT)));
@@ -80,30 +85,21 @@ MainPanel::MainPanel (SoomplerAudioProcessor& processor) : stateManager(processo
     pianoRoll.reset (new PianoRoll(processor, processor));
     pianoRoll->setBounds (Settings::PIANO_ROLL_BOUNDS);
     pianoRoll->setName ("piano roll component");
-    processor.addSampleInfoListener(pianoRoll);
+    processor.addSampleInfoListener(pianoRoll.get());
+
+    pianoScroll.reset(new SoomplerScrollbar(false));
+    pianoScroll->setRangeLimits(0, 200);
+    pianoScroll->setCurrentRangeStart(Settings::PIANO_ROLL_RANGE_START);
+    pianoScroll->addListener(pianoRoll.get());
+    pianoScroll->setBounds(0, Settings::MAIN_PANEL_HEIGHT - Settings::PIANO_ROLL_SCROLL_HEIGHT, pianoRoll->getWidth(), Settings::PIANO_ROLL_SCROLL_HEIGHT);
 
     addAndMakeVisible (pianoRoll.get());
+    addAndMakeVisible(pianoScroll.get());
     editor.addToGuiEditor (pianoRoll.get());
+    editor.addToGuiEditor (pianoScroll.get());
 
-    // ADSR controls
-    attackKnob.reset (new SoomplerKnob ("Attack"));
-    attackKnob->attachTo("attack", stateManager);
-    
-    decayKnob.reset (new SoomplerKnob ("Decay"));
-    decayKnob->attachTo("decay", stateManager);
-    
-    sustainKnob.reset (new SoomplerKnob ("Sustain"));
-    sustainKnob->attachTo("sustain", stateManager);
-    
-    releaseKnob.reset (new SoomplerKnob ("Release"));
-    releaseKnob->attachTo("release", stateManager);
-    
     // adsr panel
-    adsrPanel.reset(new LinearPanel(Orientation::HORIZONTAL, "ADSR"));
-    adsrPanel->addAndMakeVisible(attackKnob.get());
-    adsrPanel->addAndMakeVisible(decayKnob.get());
-    adsrPanel->addAndMakeVisible(sustainKnob.get());
-    adsrPanel->addAndMakeVisible(releaseKnob.get());
+    adsrPanel.reset(new AdsrPanel(stateManager, processor.getSampleManager()));
     adsrPanel->setPosition(150, 225);
     addAndMakeVisible(adsrPanel.get());
 
@@ -115,29 +111,27 @@ MainPanel::MainPanel (SoomplerAudioProcessor& processor) : stateManager(processo
     //reverseAttachment.reset(new ButtonAttachment(stateManager, "reverse", *reverseButton));
 
     // place components like adsr panel
-    auto miscControllsBaseline = attackKnob->getY() + adsrPanel->getY();
-    volumeKnob->setPosition(60, miscControllsBaseline);
+    auto miscControllsBaseline = adsrPanel->getY() + 25;
+    volumeKnob->setPosition(20, miscControllsBaseline);
+    glideKnob->setPosition(80, miscControllsBaseline);
     reverseButton->setBounds(380, miscControllsBaseline, 100, 50);
 
+
     // hide some controls until sample is loaded
-    adsrPanel->setVisible(false);
-    volumeKnob->setVisible(false);
-    reverseButton->setVisible(false);
-    loopButton->setVisible(false);
+    noSamplesLeft();
     
     // hide deprecated buttons
     openFileButton->setVisible(false);
 
     // connect knobs to listener
-    attackKnob->addListener(this);
-    decayKnob->addListener(this);
-    sustainKnob->addListener(this);
-    releaseKnob->addListener(this);
     volumeKnob->addListener(this);
+    glideKnob->addListener(this);
 
     // add GUI editor last
     // it ensures that gui overlay will work properly
     editor.initOverlay();
+
+    processor.addSampleInfoListener(this);
     
     restoreMainPanelState();
 }
@@ -146,10 +140,6 @@ MainPanel::~MainPanel()
 {
     loopAttachment = nullptr;
 
-    attackKnob = nullptr;
-    decayKnob = nullptr;
-    sustainKnob = nullptr;
-    releaseKnob = nullptr;
     volumeKnob = nullptr;
     openFileButton = nullptr;
     aboutButton = nullptr;
@@ -184,13 +174,9 @@ void MainPanel::sliderValueChanged (Slider* sliderThatWasMoved)
     {
         processor.setVolume(volumeKnob->getValue());
         return;
-    }
-    else
+    } else if (sliderThatWasMoved == glideKnob->getSlider())
     {
-        adsrParams.attack = attackKnob->getValue();
-        adsrParams.decay = decayKnob->getValue();
-        adsrParams.sustain = sustainKnob->getValue();
-        adsrParams.release = releaseKnob->getValue();
+        processor.setGlide(glideKnob->getValue());
     }
 
 }
@@ -217,6 +203,27 @@ void MainPanel::buttonClicked (Button* buttonThatWasClicked)
 float MainPanel::getVolume() const
 {
     return volumeKnob.get()->getValue();
+}
+
+void MainPanel::sampleChanged(std::shared_ptr<SampleInfo> info)
+{
+    adsrPanel->sampleChanged(info);
+
+    volumeKnob->setValue(info->getVolume());
+    reverseButton->setToggled(info->reversed);
+}
+
+void MainPanel::noSamplesLeft()
+{
+    loadSampleTip->setVisible(true);
+    sampleViewer->setVisible(false);
+    adsrPanel->setVisible(false);
+    volumeKnob->setVisible(false);
+    glideKnob->setVisible(false);
+    reverseButton->setVisible(false);
+    loopButton->setVisible(false);
+    pianoRoll->setVisible(false);
+    pianoScroll->setVisible(false);
 }
 
 void MainPanel::openFileButtonClicked()
@@ -266,10 +273,12 @@ void MainPanel::transportStateChanged(TransportState state)
         loopButton->setToggled(false);
     case Ready:
         loadSampleTip->setVisible(false);
-
+        pianoRoll->setVisible(true);
+        pianoScroll->setVisible(true);
         sampleViewer->setVisible(true);
         adsrPanel->setVisible(true);
         volumeKnob->setVisible(true);
+        glideKnob->setVisible(true);
         reverseButton->setVisible(true);
         loopButton->setVisible(true);
         reverseButton->setToggled(processor.isSampleReversed());
@@ -317,10 +326,11 @@ void MainPanel::filesDropped(const juce::StringArray &files, int x, int y) {
 void MainPanel::restoreMainPanelState() {
     // check if sample already loaded
     // (plugin reopened)
-    if (processor.getThumbnail().getNumChannels() > 0) {
+    auto sample = processor.getSampleManager()->getActiveSample();
+    if (sample != nullptr && sample->thumbnail->getNumChannels() > 0) {
         // load current sample
-        sampleViewer->newSampleInfoRecieved(processor.getCurrentSampleInfo());
-        pianoRoll->newSampleInfoRecieved(processor.getCurrentSampleInfo());
+        sampleViewer->sampleChanged(processor.getCurrentSampleInfo());
+        pianoRoll->sampleChanged(processor.getCurrentSampleInfo());
         
         bool reversed = processor.isSampleReversed();
         bool looped = processor.isLoopModeOn();

@@ -6,7 +6,7 @@
 namespace Settings {
 
 constexpr int MAIN_PANEL_WIDTH = 500;
-constexpr int MAIN_PANEL_HEIGHT = 385;
+constexpr int MAIN_PANEL_HEIGHT = 400;
 constexpr int BROWSER_WIDTH = 320;
 constexpr auto SAMPLE_PREVIEW_HEIGHT = 30;
 
@@ -63,14 +63,18 @@ constexpr auto PIANO_ROLL_NOTE_COUNT = PIANO_ROLL_WIDTH / PIANO_ROLL_WHITE_NOTE_
 constexpr auto PIANO_ROLL_TIPS_OFFSET_X = 5;
 constexpr auto PIANO_ROLL_TIPS_OFFSET_Y = PIANO_ROLL_HEIGHT - 10;
 constexpr auto PIANO_ROLL_MARKER_SIZE = 8;
+constexpr auto PIANO_ROLL_ARROW_WIDTH = 64 / 4.0;
+constexpr auto PIANO_ROLL_ARROW_HEIGHT = 60 / 4.0;
 
-const auto PIANO_ROLL_BOUNDS = Rectangle<int>(0, MAIN_PANEL_HEIGHT - PIANO_ROLL_HEIGHT - PIANO_ROLL_RANGE_MARKERS_HEIGHT,
+constexpr auto PIANO_ROLL_SCROLL_HEIGHT = 15;
+constexpr auto PIANO_ROLL_RANGE_START = 100;
+
+const auto PIANO_ROLL_BOUNDS = Rectangle<int>(0, MAIN_PANEL_HEIGHT - PIANO_ROLL_SCROLL_HEIGHT - PIANO_ROLL_HEIGHT - PIANO_ROLL_RANGE_MARKERS_HEIGHT,
                                               PIANO_ROLL_WIDTH, PIANO_ROLL_HEIGHT + PIANO_ROLL_RANGE_MARKERS_HEIGHT);
 
 const auto PIANO_ROLL_GRADIENT = ColourGradient(PIANO_ROLL_WHITE_COLOR, Point<float>(PIANO_ROLL_WIDTH / 2, PIANO_ROLL_HEIGHT - 1),
                                                 PIANO_ROLL_GRADIENT_COLOR, Point<float>(PIANO_ROLL_WIDTH / 2, 0),
                                                 false);
-
 // Main Panel
 
 constexpr auto MAIN_MENU_HEIGHT = 40;
@@ -106,7 +110,7 @@ constexpr auto DEFAULT_SUSTAIN_LEVEL = 1.0f;
 const auto TOGGLED_BUTTON_MASK_COLOR = Colour((uint8) 255, (uint8) 128, (uint8) 128, (uint8) 128);
 
 // NOTE
-constexpr auto FIRST_KEY_ON_SCREEN = 48;
+constexpr auto DEFAULT_FIRST_KEY = 48;
 constexpr auto DEFAULT_ROOT_NOTE = 60;
 const auto DEFAULT_MIN_NOTE = DEFAULT_ROOT_NOTE - 12;
 const auto DEFAULT_MAX_NOTE = DEFAULT_ROOT_NOTE + 12;
@@ -129,6 +133,12 @@ const auto BROWSER_BOUNDS = Rectangle<int>(0, 0, BROWSER_WIDTH, WINDOW_HEIGHT);
     
     // SYNTH CLASS
     const auto MAX_SAMPLE_DIFF = 0.1f;
+    
+    const auto DEFAULT_SYNTH_VOICES = 3;
+
+    const auto CLOSE_SAMPLE_BUTTON_SIZE = 16;
+
+    const auto SCROLL_BAR_BACKGROUND_COLOR = Colour(50, 62, 68);
 }
 
 #endif //SOOMPLER_SOURCE_SETTINGS_H

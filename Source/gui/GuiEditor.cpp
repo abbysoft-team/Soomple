@@ -1,5 +1,5 @@
-#include <../Source/GuiEditor.h>
-#include <../Source/Settings.h>
+#include "GuiEditor.h"
+#include "../Settings.h"
 
 /**
  *

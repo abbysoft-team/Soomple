@@ -16,10 +16,13 @@
 #include "MidiEventConsumer.h"
 #include "TransportInfo.h"
 #include "SampleInfo.h"
-#include "SAudioThumbnail.h"
+#include "gui/SAudioThumbnail.h"
 #include "FileListener.h"
-#include "SamplePreviewSource.h"
+#include "browser/SamplePreviewSource.h"
 #include "SaveableState.h"
+#include "synth/SoomplerSynth.h"
+#include "SampleManager.h"
+#include "synth/ExtendedSampler.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
@@ -33,7 +36,7 @@ class SoomplerAudioProcessor  :
         public MidiEventSupplier,
         public MidiEventConsumer,
         public TransportInfoOwner,
-        public SampleInfoListener,
+        public SampleChangeListener,
         public FileListener
 {
 public:
@@ -77,10 +80,6 @@ public:
 
     std::shared_ptr<File> getLoadedSample() const;
 
-    SAudioThumbnail& getThumbnail() {
-        return thumbnail;
-    }
-
     void loadSample(const File& file, bool reload = false);
 
     void playSample();
@@ -102,9 +101,10 @@ public:
     // percent of a sample length
     void setSampleStartPosition(int64 sample);
     void setSampleEndPosition(int64 sample);
-    void newSampleInfoRecieved(std::shared_ptr<SampleInfo> info) override;
+    void sampleChanged(std::shared_ptr<SampleInfo> info) override;
 
     void setVolume(double volume);
+    void setGlide(double glide);
 
     void notifyTransportStateChanged(TransportState state);
 
@@ -117,8 +117,6 @@ public:
     void setNoteRange(int minNote, int maxNote) override;
 
     std::shared_ptr<TransportInfo> getTransportInfo() override;
-
-    void addSampleInfoListener(std::shared_ptr<SampleInfoListener> sampleInfoListener);
 
     void setAdsrParams(ADSR::Parameters params);
     
@@ -152,6 +150,11 @@ public:
     void saveState();
     void saveStateAndReleaseObjects();
     
+    void addSampleInfoListener(SampleChangeListener* listener);
+
+    std::shared_ptr<SampleManager> getSampleManager();
+
+    void loadThumbnailAndSoundFor(std::shared_ptr<SampleInfo> sample);
 private:
     //==============================================================================
 
@@ -160,7 +163,7 @@ private:
     AudioProcessorValueTreeState stateManager;
 
     std::shared_ptr<File> loadedSample;
-    Synthesiser synth;
+    SoomplerSynth synth;
     int currentSample;
 
     AudioFormatManager formatManager;
@@ -170,7 +173,7 @@ private:
     TransportStateListener* transportStateListener;
 
     AudioThumbnailCache thumbnailCache;
-    SAudioThumbnail thumbnail;
+    std::shared_ptr<SAudioThumbnail> thumbnail;
 
     int64 startSample;
     int64 endSample;
@@ -179,14 +182,14 @@ private:
 
     float volume;
 
-    std::shared_ptr<SampleInfo> sampleInfo;
-    std::vector<std::shared_ptr<SampleInfoListener>> sampleInfoListeners;
+    std::shared_ptr<SampleManager> sampleManager;
+//    std::vector<std::shared_ptr<SampleInfoListener>> sampleInfoListeners;
 
     SamplePreviewSource *previewSource;
 
     AudioProcessorValueTreeState::ParameterLayout createParametersLayout();
 
-    SynthesiserSound::Ptr getSampleData(std::shared_ptr<File> sampleFile);
+    soompler::ExtendedSound* getSampleData(std::shared_ptr<File> sampleFile);
     void changeListenerCallback(ChangeBroadcaster* source) override;
     void changeTransportState(TransportState newState);
     void setTransportSource(AudioFormatReader*);

@@ -11,67 +11,87 @@
               pluginAUExportPrefix="soompler_au">
   <MAINGROUP id="Pwscug" name="Soompler">
     <GROUP id="{B2D5FA2C-D197-0FB3-82E2-F943B5E93292}" name="Source">
-      <FILE id="koY6MA" name="SoomplerKnob.cpp" compile="1" resource="0"
-            file="Source/SoomplerKnob.cpp"/>
-      <FILE id="wOSpmP" name="SoomplerKnob.h" compile="0" resource="0" file="Source/SoomplerKnob.h"/>
-      <FILE id="zY4S6V" name="LinearPanel.cpp" compile="1" resource="0" file="Source/LinearPanel.cpp"/>
-      <FILE id="Tg6QT9" name="LinearPanel.h" compile="0" resource="0" file="Source/LinearPanel.h"/>
-      <FILE id="KYFWVb" name="AboutSplash.cpp" compile="1" resource="0" file="Source/AboutSplash.cpp"/>
-      <FILE id="QAUsY2" name="AboutSplash.h" compile="0" resource="0" file="Source/AboutSplash.h"/>
+      <FILE id="DZpbHx" name="Glide.cpp" compile="1" resource="0" file="Source/synth/Glide.cpp"/>
+      <FILE id="HUwSQJ" name="Glide.h" compile="0" resource="0" file="Source/synth/Glide.h"/>
+      <FILE id="Gaejwh" name="SoomplerScrollbar.cpp" compile="1" resource="0"
+            file="Source/gui/SoomplerScrollbar.cpp"/>
+      <FILE id="UVxXrV" name="SoomplerScrollbar.h" compile="0" resource="0"
+            file="Source/gui/SoomplerScrollbar.h"/>
+      <FILE id="fqii17" name="AdsrPanel.cpp" compile="1" resource="0" file="Source/gui/AdsrPanel.cpp"/>
+      <FILE id="qMnOJ1" name="AdsrPanel.h" compile="0" resource="0" file="Source/gui/AdsrPanel.h"/>
+      <FILE id="aYf7ND" name="SampleManager.cpp" compile="1" resource="0"
+            file="Source/SampleManager.cpp"/>
+      <FILE id="yjY7x0" name="SampleManager.h" compile="0" resource="0" file="Source/SampleManager.h"/>
+      <FILE id="og6w1e" name="ViewerHeader.cpp" compile="1" resource="0"
+            file="Source/viewer/ViewerHeader.cpp"/>
+      <FILE id="pKtsia" name="ViewerHeader.h" compile="0" resource="0" file="Source/viewer/ViewerHeader.h"/>
+      <FILE id="i37h3g" name="ExtendedSampler.cpp" compile="1" resource="0"
+            file="Source/synth/ExtendedSampler.cpp"/>
+      <FILE id="j4BzhE" name="ExtendedSampler.h" compile="0" resource="0"
+            file="Source/synth/ExtendedSampler.h"/>
+      <FILE id="Gq2GsA" name="ExtendedVoice.cpp" compile="1" resource="0"
+            file="Source/synth/ExtendedVoice.cpp"/>
+      <FILE id="Mcv5Uq" name="ExtendedVoice.h" compile="0" resource="0" file="Source/synth/ExtendedVoice.h"/>
+      <FILE id="KmLNg8" name="SoomplerSynth.cpp" compile="1" resource="0"
+            file="Source/synth/SoomplerSynth.cpp"/>
+      <FILE id="Yfkjkz" name="SoomplerSynth.h" compile="0" resource="0" file="Source/synth/SoomplerSynth.h"/>
+      <FILE id="FVKXBV" name="AboutSplash.cpp" compile="1" resource="0" file="Source/gui/AboutSplash.cpp"/>
+      <FILE id="R9HuPo" name="AboutSplash.h" compile="0" resource="0" file="Source/gui/AboutSplash.h"/>
+      <FILE id="KGAqUD" name="GuiEditor.cpp" compile="1" resource="0" file="Source/gui/GuiEditor.cpp"/>
+      <FILE id="lC1UVV" name="GuiEditor.h" compile="0" resource="0" file="Source/gui/GuiEditor.h"/>
+      <FILE id="zxOzsE" name="LinearPanel.cpp" compile="1" resource="0" file="Source/gui/LinearPanel.cpp"/>
+      <FILE id="Jd10IM" name="LinearPanel.h" compile="0" resource="0" file="Source/gui/LinearPanel.h"/>
+      <FILE id="qPrhcr" name="MainPanel.cpp" compile="1" resource="0" file="Source/gui/MainPanel.cpp"/>
+      <FILE id="dhKw0K" name="MainPanel.h" compile="0" resource="0" file="Source/gui/MainPanel.h"/>
+      <FILE id="XEoXRK" name="PianoRoll.cpp" compile="1" resource="0" file="Source/gui/PianoRoll.cpp"/>
+      <FILE id="HlB35g" name="PianoRoll.h" compile="0" resource="0" file="Source/gui/PianoRoll.h"/>
+      <FILE id="s9FUCv" name="SAudioThumbnail.cpp" compile="1" resource="0"
+            file="Source/gui/SAudioThumbnail.cpp"/>
+      <FILE id="zTqauY" name="SAudioThumbnail.h" compile="0" resource="0"
+            file="Source/gui/SAudioThumbnail.h"/>
+      <FILE id="xnI1RT" name="SoomplerImageButton.cpp" compile="1" resource="0"
+            file="Source/gui/SoomplerImageButton.cpp"/>
+      <FILE id="prL2L0" name="SoomplerImageButton.h" compile="0" resource="0"
+            file="Source/gui/SoomplerImageButton.h"/>
+      <FILE id="MN4m00" name="SoomplerKnob.cpp" compile="1" resource="0"
+            file="Source/gui/SoomplerKnob.cpp"/>
+      <FILE id="GRYPUB" name="SoomplerKnob.h" compile="0" resource="0" file="Source/gui/SoomplerKnob.h"/>
+      <FILE id="THdist" name="SoomplerSlider.cpp" compile="1" resource="0"
+            file="Source/gui/SoomplerSlider.cpp"/>
+      <FILE id="XRj3Hh" name="SoomplerSlider.h" compile="0" resource="0"
+            file="Source/gui/SoomplerSlider.h"/>
+      <FILE id="FMNvto" name="SoomplerToggleButton.cpp" compile="1" resource="0"
+            file="Source/gui/SoomplerToggleButton.cpp"/>
+      <FILE id="R3VOc0" name="SoomplerToggleButton.h" compile="0" resource="0"
+            file="Source/gui/SoomplerToggleButton.h"/>
+      <FILE id="IM4EVY" name="ToggledImageButton.cpp" compile="1" resource="0"
+            file="Source/gui/ToggledImageButton.cpp"/>
+      <FILE id="oVhKiF" name="ToggledImageButton.h" compile="0" resource="0"
+            file="Source/gui/ToggledImageButton.h"/>
+      <FILE id="OA5uH6" name="SampleBrowser.cpp" compile="1" resource="0"
+            file="Source/browser/SampleBrowser.cpp"/>
+      <FILE id="MHkRWj" name="SampleBrowser.h" compile="0" resource="0" file="Source/browser/SampleBrowser.h"/>
+      <FILE id="U8HMvS" name="SamplePreviewComponent.cpp" compile="1" resource="0"
+            file="Source/browser/SamplePreviewComponent.cpp"/>
+      <FILE id="zGhHwT" name="SamplePreviewComponent.h" compile="0" resource="0"
+            file="Source/browser/SamplePreviewComponent.h"/>
+      <FILE id="ATHUkT" name="SamplePreviewSource.cpp" compile="1" resource="0"
+            file="Source/browser/SamplePreviewSource.cpp"/>
+      <FILE id="PGz2yG" name="SamplePreviewSource.h" compile="0" resource="0"
+            file="Source/browser/SamplePreviewSource.h"/>
+      <FILE id="CZ3LiX" name="SampleViewer.cpp" compile="1" resource="0"
+            file="Source/viewer/SampleViewer.cpp"/>
+      <FILE id="iJAFZs" name="SampleViewer.h" compile="0" resource="0" file="Source/viewer/SampleViewer.h"/>
       <FILE id="kgpTvt" name="StateBundle.cpp" compile="1" resource="0" file="Source/StateBundle.cpp"/>
       <FILE id="nQgQbI" name="StateBundle.h" compile="0" resource="0" file="Source/StateBundle.h"/>
       <FILE id="Vktkem" name="SaveableState.h" compile="0" resource="0" file="Source/SaveableState.h"/>
-      <FILE id="xZPS2n" name="SamplePreviewSource.cpp" compile="1" resource="0"
-            file="Source/SamplePreviewSource.cpp"/>
-      <FILE id="KerxK9" name="SamplePreviewSource.h" compile="0" resource="0"
-            file="Source/SamplePreviewSource.h"/>
-      <FILE id="LAOZjd" name="SamplePreviewComponent.cpp" compile="1" resource="0"
-            file="Source/SamplePreviewComponent.cpp" xcodeResource="1"/>
-      <FILE id="EExMAB" name="SamplePreviewComponent.h" compile="0" resource="0"
-            file="Source/SamplePreviewComponent.h"/>
       <FILE id="lml4FD" name="FileListener.h" compile="0" resource="0" file="Source/FileListener.h"/>
-      <FILE id="cFGQfY" name="SampleBrowser.cpp" compile="1" resource="0"
-            file="Source/SampleBrowser.cpp"/>
-      <FILE id="X6GOXN" name="SampleBrowser.h" compile="0" resource="0" file="Source/SampleBrowser.h"/>
-      <FILE id="fF5J5H" name="SAudioThumbnail.cpp" compile="1" resource="0"
-            file="Source/SAudioThumbnail.cpp"/>
-      <FILE id="PE79R0" name="SAudioThumbnail.h" compile="0" resource="0"
-            file="Source/SAudioThumbnail.h"/>
-      <FILE id="pCMEcc" name="SoomplerToggleButton.cpp" compile="1" resource="0"
-            file="Source/SoomplerToggleButton.cpp"/>
-      <FILE id="da2oYI" name="SoomplerToggleButton.h" compile="0" resource="0"
-            file="Source/SoomplerToggleButton.h"/>
-      <FILE id="Lfv6Is" name="SoomplerImageButton.cpp" compile="1" resource="0"
-            file="Source/SoomplerImageButton.cpp"/>
-      <FILE id="KHX8o1" name="SoomplerImageButton.h" compile="0" resource="0"
-            file="Source/SoomplerImageButton.h"/>
-      <FILE id="mNcHaN" name="SoomplerSlider.cpp" compile="1" resource="0"
-            file="Source/SoomplerSlider.cpp"/>
-      <FILE id="krmfTX" name="SoomplerSlider.h" compile="0" resource="0"
-            file="Source/SoomplerSlider.h"/>
-      <FILE id="hlDDr3" name="ToggledImageButton.cpp" compile="1" resource="0"
-            file="Source/ToggledImageButton.cpp"/>
-      <FILE id="WE99ZN" name="ToggledImageButton.h" compile="0" resource="0"
-            file="Source/ToggledImageButton.h"/>
-      <FILE id="gupJ6Y" name="GuiEditor.h" compile="0" resource="0" file="Source/GuiEditor.h"/>
-      <FILE id="xF0vjE" name="GuiEditor.cpp" compile="1" resource="0" file="Source/GuiEditor.cpp"/>
       <FILE id="HE5JfF" name="TransportInfo.h" compile="0" resource="0" file="Source/TransportInfo.h"/>
       <FILE id="XWwcUI" name="SampleInfo.h" compile="0" resource="0" file="Source/SampleInfo.h"/>
-      <FILE id="m8JTaG" name="SampleViewer.cpp" compile="1" resource="0"
-            file="Source/SampleViewer.cpp"/>
-      <FILE id="FN51EI" name="SampleViewer.h" compile="0" resource="0" file="Source/SampleViewer.h"/>
-      <FILE id="SSO38O" name="MainPanel.cpp" compile="1" resource="0" file="Source/MainPanel.cpp"/>
-      <FILE id="VEWxzN" name="MainPanel.h" compile="0" resource="0" file="Source/MainPanel.h"/>
       <FILE id="zomdcA" name="MidiEventConsumer.h" compile="0" resource="0"
             file="Source/MidiEventConsumer.h"/>
       <FILE id="JAhtnA" name="MidiEventSupplier.h" compile="0" resource="1"
             file="Source/MidiEventSupplier.h"/>
-      <FILE id="S1PcDr" name="PianoRoll.cpp" compile="1" resource="0" file="Source/PianoRoll.cpp"/>
-      <FILE id="Sr2sC3" name="PianoRoll.h" compile="0" resource="0" file="Source/PianoRoll.h"/>
-      <FILE id="oUF2By" name="ExtendedSampler.cpp" compile="1" resource="0"
-            file="Source/ExtendedSampler.cpp"/>
-      <FILE id="NuGZSt" name="ExtendedSampler.h" compile="0" resource="0"
-            file="Source/ExtendedSampler.h"/>
       <FILE id="LqYQa3" name="Settings.h" compile="0" resource="0" file="Source/Settings.h"/>
       <FILE id="PIRvl8" name="TransportStateListener.h" compile="0" resource="0"
             file="Source/TransportStateListener.h"/>
@@ -84,6 +104,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="xoPeua" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="rNOuQH" name="left.png" compile="0" resource="1" file="Resources/left.png"/>
+    <FILE id="lZX2xy" name="right.png" compile="0" resource="1" file="Resources/right.png"/>
     <FILE id="A4HqCo" name="about.png" compile="0" resource="1" file="Resources/about.png"/>
     <FILE id="XCh1dc" name="play.png" compile="0" resource="1" file="Resources/play.png"/>
     <FILE id="Fpn4No" name="stop.png" compile="0" resource="1" file="Resources/stop.png"/>
@@ -92,6 +114,7 @@
     <FILE id="SJMWVx" name="background.png" compile="1" resource="1" file="Resources/background.png"/>
     <FILE id="v8H9xB" name="RobotoCondensed-Regular.ttf" compile="0" resource="1"
           file="Resources/RobotoCondensed-Regular.ttf"/>
+    <FILE id="UQKMAA" name="&#1089;lose.png" compile="0" resource="1" file="Resources/&#1089;lose.png"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile">

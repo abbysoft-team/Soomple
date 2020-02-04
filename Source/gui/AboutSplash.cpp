@@ -9,8 +9,8 @@
 */
 
 #include "AboutSplash.h"
-#include "Strings.h"
-#include "Settings.h"
+#include "../Strings.h"
+#include "../Settings.h"
 
 AboutSplash::AboutSplash() : Component() {
     background = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);

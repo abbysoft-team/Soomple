@@ -8,10 +8,10 @@
   ==============================================================================
 */
 #include <JuceHeader.h>
-#include "SoomplerSlider.h"
-#include "SoomplerImageButton.h"
-#include "SoomplerToggleButton.h"
-#include "PluginProcessor.h"
+#include "../gui/SoomplerSlider.h"
+#include "../gui/SoomplerImageButton.h"
+#include "../gui/SoomplerToggleButton.h"
+#include "../PluginProcessor.h"
 #include "SamplePreviewSource.h"
 #include <thread>
 

@@ -20,9 +20,10 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "SampleInfo.h"
-#include "TransportInfo.h"
-#include "SAudioThumbnail.h"
+#include "../TransportInfo.h"
+#include "../SampleInfo.h"
+#include "../gui/SAudioThumbnail.h"
+#include "ViewerHeader.h"
 
 enum RangeLine {
     NONE,
@@ -36,25 +37,24 @@ enum RangeLine {
   Dont forget to set SampleInfoListener to be able to send updated sample start and end
   positions to some controller class.
 */
-class SampleViewer  : public Component, public SampleInfoListener
+class SampleViewer  : public Component, public SampleChangeListener
 {
 public:
-    SampleViewer (SAudioThumbnail& thumbnail, TransportInfoOwner& transportInfoOwner, SampleInfoListener& sampleInfoListener);
+    SampleViewer (TransportInfoOwner& transportInfoOwner, SampleChangeListener& sampleInfoListener, std::shared_ptr<SampleManager> manager);
     ~SampleViewer();
 
     void paint (Graphics& g) override;
     void resized() override;
-    void newSampleInfoRecieved(std::shared_ptr<SampleInfo> info) override;
+    void sampleChanged(std::shared_ptr<SampleInfo> info) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 
-    SAudioThumbnail& thumbnail;
     std::shared_ptr<SampleInfo> currentSample;
     TransportInfoOwner& transportInfoOwner;
     // this object can modify sample's start and end positions
     // with range lines, so some another object can use this new values
-    SampleInfoListener& sampleInfoListener;
+    SampleChangeListener& sampleInfoListener;
 
     // not active sample regions, before start line and after end lines
     int startRangeX;
@@ -65,6 +65,10 @@ private:
 
     RangeLine draggedLine;
 
+    ViewerHeader header;
+
+    std::shared_ptr<SampleManager> manager;
+
     //[/UserVariables]
 
     //==============================================================================
@@ -74,7 +78,6 @@ private:
     int calculateCoordBySample(int64 sample);
     void calculateEndRangeX();
     void notifySampleInfoListeners();
-    String getCroppedNameIfNeeded();
 
     void mouseDrag(const MouseEvent &event) override;
     void mouseMove(const MouseEvent &event) override;
